@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Merciless Ninja - My Watch Faces</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #121212;
+        color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+      header {
+        background: #1f1f1f;
+        padding: 20px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #1c1c1c;
+        border-radius: 8px;
+      }
+      .watchface {
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #222;
+        margin-top: 20px;
+      }
+      img.preview {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border: 2px solid #444;
+        border-radius: 10px;
+        margin: 5px;
+      }
+      .instructions {
+        text-align: left;
+        margin-top: 40px;
+        background: #181818;
+        padding: 20px;
+        border-radius: 8px;
+        line-height: 1.6;
+      }
+      a.download-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #0a84ff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 15px;
+      }
+      a.download-btn:hover {
+        background: #006edc;
+      }
+    </style>
+  </head>
+  <body>
+    <header>Merciless Ninja – My Watch Faces</header>
+
+    <div class="container">
+      <div class="watchface">
+        <h2>Sundowning</h2>
+        <div>
+          <img
+            src="assets/sundowning1.png"
+            alt="Sundowning preview 1"
+            class="preview"
+          />
+          <img
+            src="assets/sundowning2.png"
+            alt="Sundowning preview 2"
+            class="preview"
+          />
+          <img
+            src="assets/sundowning3.png"
+            alt="Sundowning preview 3"
+            class="preview"
+          />
+        </div>
+        <p>Elegant dark-themed analog watch face with glowing accents.</p>
+        <div id="download-area">
+          <a id="download-link" class="download-btn" href="#">Download APK</a>
+          <p id="download-count">Fetching download count...</p>
+        </div>
+      </div>
+
+      <div class="instructions">
+        <h3>Installation Instructions</h3>
+        <p><strong>From Mobile:</strong></p>
+        <ul>
+          <li>Download the APK above on your phone.</li>
+          <li>
+            Send it to your smartwatch via the Galaxy Wearable app or file
+            transfer app.
+          </li>
+          <li>Install and set it as your current watch face.</li>
+        </ul>
+
+        <p><strong>From PC (Windows / macOS):</strong></p>
+        <ul>
+          <li>
+            Install
+            <a
+              href="https://developer.android.com/studio/releases/platform-tools"
+              style="color: #0a84ff"
+              >Android Platform Tools</a
+            >.
+          </li>
+          <li>Enable Developer Options and ADB Debugging on your watch.</li>
+          <li>
+            Connect your watch and run:
+            <pre>adb install com.merciless.sundowning.apk</pre>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      const owner = "MercilessNinja";
+      const repo = "my-watch-faces";
+
+      async function loadDownloadData() {
+        try {
+          const res = await fetch(
+            `https://api.github.com/repos/${owner}/${repo}/releases/latest`
+          );
+          const data = await res.json();
+
+          if (!data.assets || data.assets.length === 0) {
+            document.getElementById("download-count").innerText =
+              "No release assets found.";
+            return;
+          }
+
+          // Find the Sundowning .apk asset
+          const apkAsset = data.assets.find(
+            (a) => a.name === "com.merciless.sundowning.apk"
+          );
+          if (!apkAsset) {
+            document.getElementById("download-count").innerText =
+              "APK not found in the latest release.";
+            return;
+          }
+
+          document.getElementById("download-link").href =
+            apkAsset.browser_download_url;
+          document.getElementById("download-count").innerText =
+            "Downloaded " + apkAsset.download_count + " times";
+        } catch (e) {
+          document.getElementById("download-count").innerText =
+            "Error fetching data.";
+        }
+      }
+
+      loadDownloadData();
+    </script>
+  </body>
+</html>
